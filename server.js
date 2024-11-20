@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 
 app.use(express.static(__dirname + '/public'))
+app.set('view engine', 'ejs')
+
 
 const { MongoClient } = require('mongodb');
 
@@ -23,6 +25,13 @@ app.get('/', (요청, 응답) => {
 })
 
 app.get('/news', (요청, 응답) => {
-    // 응답.send('오늘 비옴')
-    db.collection('post').insertOne({title: '어쩌구'})
+    응답.send('오늘 비옴')
 })
+
+app.get('/list', async (요청, 응답)=>{
+    let result = await db.collection('post').find().toArray()
+    console.log(result[0].title);
+    응답.render('list.ejs', { posts : result })
+})
+
+
